@@ -1,3 +1,52 @@
 https://firm-rare-mule.ngrok-free.app/api/customer/login/
 https://docs.google.com/document/d/1eeU5zjNzGU084O7nDShoQxfjHmqaoyP6xBx_wSRWFuY/edit?tab=t.0
 https://intersoft123.sharepoint.com/:x:/r/sites/DocuIntel/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7B6f0644ed-3313-474e-bfb3-e1d1c216cb73%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1757937218969&web=1
+
+//For Registration Page
+Request:
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "password": "Password@123",
+  "confirmPassword": "Password@123",
+  "company": "Acme Corp",
+  "role": "User"
+}
+Response:
+{
+  "success": true,
+  "message": "Registration successful. Please check your email for a login link."
+}
+
+(or)
+{
+  "success": false,
+  "message": "User with this email already exists."
+}
+
+//For OTP Verification page.
+Request:
+{
+  "email": "user@example.com",
+  "otp": "123456"
+}
+Response:
+{
+  "success": true,
+  "message": "OTP verified successfully. You can now log in."
+}
+(or)
+{
+  "success": false,
+  "message": "Invalid OTP. Please try again."
+}
+(or)
+{
+  "success": false,
+  "message": "OTP has expired. Please request a new one."
+}
+//After successful verification we will redict user to login page.
+
+
+
