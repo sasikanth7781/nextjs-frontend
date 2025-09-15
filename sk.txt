@@ -1,1 +1,2 @@
 https://firm-rare-mule.ngrok-free.app/api/customer/login/
+https://docs.google.com/document/d/1eeU5zjNzGU084O7nDShoQxfjHmqaoyP6xBx_wSRWFuY/edit?tab=t.0
