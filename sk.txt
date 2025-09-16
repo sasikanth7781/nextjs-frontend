@@ -63,6 +63,20 @@ const onSuccess = (res: any) => {
     }
   };
 
+ var key = CryptoJS.enc.Utf8.parse(process.env.NEXT_PUBLIC_LOGIN_KEY);
+        var iv = CryptoJS.enc.Utf8.parse(process.env.NEXT_PUBLIC_LOGIN_KEY);
+
+        let encryptedEmail = CryptoJS.AES.encrypt(
+          CryptoJS.enc.Utf8.parse(data?.email),
+          key,
+          {
+            keySize: 128 / 8,
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7,
+          }
+        );
+NEXT_PUBLIC_LOGIN_KEY="Secret_7645@!@$#"
 
 
 
