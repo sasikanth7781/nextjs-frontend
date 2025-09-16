@@ -48,5 +48,21 @@ Response:
 }
 //After successful verification we will redict user to login page.
 
+const onSuccess = (res: any) => {
+    SetIsDialog(true);
+  };
+
+  const onError = (err: any) => {
+    setLoading(false);
+    if (err?.response?.data === "Email already exists.") {
+      enqueueSnackbar("Email already exists.", { variant: "error" });
+    } else {
+      enqueueSnackbar("Error while creating user.Please try again.", {
+        variant: "error",
+      });
+    }
+  };
+
+
 
 
