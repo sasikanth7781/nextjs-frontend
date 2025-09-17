@@ -77,6 +77,17 @@ const onSuccess = (res: any) => {
           }
         );
 NEXT_PUBLIC_LOGIN_KEY="Secret_7645@!@$#"
+import { SnackbarProvider } from "src/components/snackbar";
+import { useSnackbar } from "src/components/snackbar";
+ if (err?.response?.data === "Email already exists.") {
+            enqueueSnackbar(err?.response?.data, {
+              variant: "error",
+            });
+          } else {
+            enqueueSnackbar("Error while updating coach status.", {
+              variant: "error",
+            });
+          }
 
 
 
