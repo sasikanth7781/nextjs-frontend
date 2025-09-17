@@ -99,4 +99,13 @@ import { useSnackbar } from "src/components/snackbar";
   }, []);
 
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+  const LoginSchema = Yup.object().shape({
+    email: Yup.string().matches(emailRegex,AppConstant.VALID_EMAIL_ADDRESS).required(AppConstant.EMAIL_IS_REQUIRED),
+    password: Yup.string().required(AppConstant.PASSWORD_REQUIRED),
+  });
+
+
+
 
