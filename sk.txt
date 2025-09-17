@@ -90,4 +90,13 @@ import { useSnackbar } from "src/components/snackbar";
           }
 
 
+  useEffect(() => {
+    localStorage.clear();
+    secureLocalStorage.clear();
+    localStorage.removeItem("primaryFacility");
+    secureLocalStorage.removeItem(AppConstant.TOKEN);
+    setUserStore({});
+  }, []);
+
+
 
