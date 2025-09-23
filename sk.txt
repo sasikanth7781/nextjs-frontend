@@ -179,5 +179,9 @@ email subject:- Your SoftDoc AI Verification Code
 
 
 
+{"web":{"client_id":"225750536078-d7p8gg18qd5c9ltpnee70o5c0v6t9n8h.apps.googleusercontent.com","project_id":"medica-472410","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_…
+
+
+https://firm-rare-mule.ngrok-free.app/api/accounts/google/login/callback/%22
 
 
