@@ -183,5 +183,63 @@ email subject:- Your SoftDoc AI Verification Code
 
 
 https://firm-rare-mule.ngrok-free.app/api/accounts/google/login/callback/%22
+// app/auth/callback/page.tsx
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { saveAuthData } from "@/lib/auth";
+
+export default function CallbackPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code"); // from Google via Django
+
+    if (code) {
+      // Call Django backend to exchange code -> JWT + user info
+      fetch("https://your-django-api.com/api/google/callback/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code,
+          redirect_uri: "https://your-frontend.com/auth/callback",
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // Save tokens + Google profile in secure storage
+          saveAuthData(data);
+
+          // Redirect to home page
+          router.push("/home");
+        })
+        .catch((err) => console.error("Login error:", err));
+    }
+  }, [router]);
+
+  return <p>Logging in...</p>;
+}
+// app/login/page.tsx
+"use client";
+import { Button, Container, Typography } from "@mui/material";
+
+export default function LoginPage() {
+  const onGoogleLogin = () => {
+    // Redirect user to Django backend OAuth entry
+    window.location.href =
+      "https://your-django-api.com/accounts/google/login/?redirect_uri=https://your-frontend.com/auth/callback";
+  };
+
+  return (
+    <Container maxWidth="sm" sx={{ mt: 10, textAlign: "center" }}>
+      <Typography variant="h4">Login</Typography>
+      <Button variant="contained" color="primary" onClick={onGoogleLogin}>
+        Login with Google
+      </Button>
+    </Container>
+  );
+}
+
 
 
