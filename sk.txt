@@ -241,5 +241,125 @@ export default function LoginPage() {
   );
 }
 
+================
+npm install react-secure-storage axios jwt-decode
+
+import SecureStorage from "react-secure-storage";
+import jwtDecode from "jwt-decode";
+
+export const getAccessToken = () => SecureStorage.getItem("accessToken") as string | null;
+export const getRefreshToken = () => SecureStorage.getItem("refreshToken") as string | null;
+
+export const setTokens = (access: string, refresh: string) => {
+  SecureStorage.setItem("accessToken", access);
+  SecureStorage.setItem("refreshToken", refresh);
+};
+
+export const clearTokens = () => {
+  SecureStorage.removeItem("accessToken");
+  SecureStorage.removeItem("refreshToken");
+};
+
+export const isTokenExpired = (token: string): boolean => {
+  try {
+    const decoded: any = jwtDecode(token);
+    return decoded.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+};
+
+=================
+import axios from "axios";
+import { getAccessToken, getRefreshToken, setTokens, clearTokens, isTokenExpired } from "@/utils/tokenHelper";
+
+const api = axios.create({
+  baseURL: "https://your-backend.com/api",
+});
+
+// ✅ Attach token to every request
+api.interceptors.request.use(async (config) => {
+  let token = getAccessToken();
+
+  // Refresh proactively if expired before request
+  if (token && isTokenExpired(token)) {
+    token = await refreshAccessToken();
+  }
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// 🔁 Handle 401 and retry once
+let isRefreshing = false;
+let subscribers: ((token: string) => void)[] = [];
+
+function onRefreshed(token: string) {
+  subscribers.forEach((cb) => cb(token));
+  subscribers = [];
+}
+
+function addSubscriber(callback: (token: string) => void) {
+  subscribers.push(callback);
+}
+
+async function refreshAccessToken(): Promise<string | null> {
+  const refreshToken = getRefreshToken();
+  if (!refreshToken) return null;
+
+  try {
+    const res = await axios.post("https://your-backend.com/api/token/refresh/", {
+      refresh: refreshToken,
+    });
+
+    const newAccessToken = res.data.access;
+    setTokens(newAccessToken, refreshToken);
+    return newAccessToken;
+  } catch (error) {
+    clearTokens();
+    window.location.href = "/login";
+    return null;
+  }
+}
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        // Wait until refresh finishes
+        return new Promise((resolve) => {
+          addSubscriber((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            resolve(axios(originalRequest));
+          });
+        });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      const newAccessToken = await refreshAccessToken();
+      isRefreshing = false;
+
+      if (newAccessToken) {
+        onRefreshed(newAccessToken);
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return axios(originalRequest);
+      } else {
+        return Promise.reject(error);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export default api;
+
+
 
 
