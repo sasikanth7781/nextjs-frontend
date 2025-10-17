@@ -361,5 +361,22 @@ api.interceptors.response.use(
 export default api;
 
 
+ 
+{
+    "folders": [
+        {
+            "relativePath": "medical_reports/october",
+            "key": "uploads/1/2025-10-17T08-26-36/medical_reports/october.zip",
+            "uploadUrl": "https://4medica.s3.amazonaws.com/uploads/1/2025-10-17T08-26-36/medical_reports/october.zip?AWSAcces…
+        },
+        {
+            "relativePath": "financial_docs/2025",
+            "key": "uploads/1/2025-10-17T08-26-36/financial_docs/2025.zip",
+            "uploadUrl": "https://4medica.s3.amazonaws.com/uploads/1/2025-10-17T08-26-36/financial_docs/2025.zip?AWSAccessKey…
+        }
+    ]
+}
+
+
 
 
